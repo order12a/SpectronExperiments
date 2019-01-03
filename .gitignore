@@ -1,3 +1,7 @@
 node_modules
 out
 npm-debug.log
+allure-results
+allure-report
+.idea
+.DS_Store
