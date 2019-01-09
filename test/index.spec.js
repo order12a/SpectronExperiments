@@ -1,5 +1,3 @@
-'use strict';
-
 const Application = require('spectron').Application;
 const electron = require('electron');
 const chai = require('chai');
@@ -40,8 +38,8 @@ describe('demo app', function () {
     get: function (target, props) {
       // below 3 lines are working example but additional testing is required
       // for example we have weird situation with passing arguments into method
-      return allure.createStep(props, async (args1, args2, args3) => {
-        return target[props](args1, args2, args3);
+      return allure.createStep(props, async (...args) => {
+        return target[props](...args);
       });
     }
   };
