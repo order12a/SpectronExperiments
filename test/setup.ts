@@ -1,6 +1,6 @@
-const path = require('path');
-const fs = require('fs');
-const chaiAsPromised = require('chai-as-promised');
+import * as path from 'path';
+import * as fs from 'fs';
+import * as chaiAsPromised from "chai-as-promised"
 
 const getUserDataPath = function () {
   const productName = require('../package').productName;
@@ -18,7 +18,7 @@ const getUserDataPath = function () {
   }
 };
 
-const setupTimeout = function (test) {
+const setupTimeout = function (test): void {
   if (process.env.CI) {
     test.timeout(30000);
   } else {
@@ -26,7 +26,7 @@ const setupTimeout = function (test) {
   }
 };
 
-const removeStoredPreferences = () => {
+const removeStoredPreferences = (): void => {
   const userDataPath = getUserDataPath();
   try {
     fs.unlinkSync(path.join(userDataPath, 'Settings'));
@@ -78,11 +78,12 @@ const setupApp = function (app) {
       });
   });
 
+  // @ts-ignore
   chaiAsPromised.transferPromiseness = app.transferPromiseness;
   return app.client.waitUntilWindowLoaded();
 };
 
-module.exports = {
+export {
   removeStoredPreferences,
   getUserDataPath,
   setupApp,

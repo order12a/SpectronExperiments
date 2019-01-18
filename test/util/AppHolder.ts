@@ -1,11 +1,13 @@
-let instance;
+let instance: AppHolder;
 
-class AppHolder {
+export class AppHolder {
+  private app: any;
+
   constructor (app) {
     this.app = app;
   }
 
-  static createAppHolder (app) {
+  static createAppHolder (app): void {
     if (app === null || app === undefined) {
       throw Error('The electron app param could be null or undefined!');
     }
@@ -13,12 +15,10 @@ class AppHolder {
     instance = new AppHolder(app);
   }
 
-  static getAppHolder () {
+  static getAppHolder (): AppHolder {
     if (instance) {
       return instance;
     }
     throw Error('We should invoke createAppHolder() function at least one time!');
   }
 }
-
-module.exports = AppHolder;

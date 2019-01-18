@@ -1,9 +1,9 @@
 const AppHolder = require('../../util/AppHolder');
 
-class BaseComponent {
+export class BaseComponent {
+  public app: any;
+
   constructor () {
     this.app = AppHolder.getAppHolder().app;
   }
 }
-
-module.exports = BaseComponent;

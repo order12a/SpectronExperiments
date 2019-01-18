@@ -1,4 +1,4 @@
-const setup = require('./setup');
+import * as setup from './setup';
 
 // Just for testing hooks before each suite
 before(function () {

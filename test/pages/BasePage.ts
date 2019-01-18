@@ -8,10 +8,9 @@ const AppHolder = require('../util/AppHolder');
 // chai.should();
 // chai.use(chaiAsPromised);
 
-class BasePage {
+export class BasePage {
+  app: any;
   constructor () {
     this.app = AppHolder.getAppHolder().app;
   }
 }
-
-module.exports = BasePage;

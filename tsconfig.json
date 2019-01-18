@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "outDir": "./built",
+        "allowJs": true,
+        "target": "es6",
+        "experimentalDecorators": true,
+        "types": ["webdriverio", "mocha", "node", "chai"]
+    },
+    "include": [
+        "./test/**/*"
+    ],
+    "exclude": [
+        "./node_modules"
+      ],
+    "compileOnSave": false
+}
