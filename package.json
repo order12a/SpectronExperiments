@@ -10,7 +10,7 @@
     "dev": "electron . --debug",
     "pretest": "rimraf allure-results && rimraf built",
     "prettier": "./node_modules/.bin/prettier --write ./test/**/*.ts",
-    "test": "tsc && mocha -R mocha-multi --reporter-options mocha-allure-reporter=-,spec=- --compilers js:babel-register --full-trace ./built/**/*.spec.js && standard",
+    "test": "mocha --require ts-node/register --ui bdd -R mocha-multi --reporter-options mocha-allure-reporter=-,spec=- ./test/*.spec.ts --full-trace && standard",
     "posttest": "allure generate allure-results --clean -o allure-report",
     "package": "npm-run-all package:*",
     "package:mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --out=out --icon=assets/app-icon/mac/app.icns --osx-sign.identity='Developer ID Application: GitHub' --extend-info=assets/mac/info.plist",

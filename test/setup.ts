@@ -22,7 +22,7 @@ const setupTimeout = function (test): void {
   if (process.env.CI) {
     test.timeout(30000);
   } else {
-    test.timeout(20000);
+    test.timeout(40000);
   }
 };
 
