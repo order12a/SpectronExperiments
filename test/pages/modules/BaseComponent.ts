@@ -1,4 +1,4 @@
-const AppHolder = require('../../util/AppHolder');
+import {AppHolder} from '../../util/AppHolder';
 
 export class BaseComponent {
   public app: any;

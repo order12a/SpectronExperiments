@@ -1,7 +1,7 @@
 let instance: AppHolder;
 
 export class AppHolder {
-  private app: any;
+  public app: any;
 
   constructor (app) {
     this.app = app;

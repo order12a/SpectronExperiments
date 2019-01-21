@@ -2,32 +2,33 @@ const Application = require('spectron').Application;
 const electron = require('electron');
 import * as chai from 'chai';
 import * as path from 'path';
-import * as chaiAsPromised from 'chai-as-promised';
+const chaiAsPromised = require('chai-as-promised');
 import * as setup from './setup';
 import { AboutPage } from './pages/AboutPage';
 import {AppHolder} from './util/AppHolder';
 import {MainMenu} from './pages/modules/MainMenu';
 import * as beforeHelper from './before.helper'; // Helper with implemented before and after hooks
-const AllureReporter = require('mocha-allure-reporter');
+require('mocha-allure-reporter');
 chai.should();
 chai.use(chaiAsPromised);
 
-const timeout: number = process.env.CI ? 30000 : 20000;
+const timeout: number = process.env.CI ? 30000 : 40000;
 
 describe('demo app', function () {
   setup.setupTimeout(this);
 
-  let app;
+  let app: any;
   let aboutPage: AboutPage;
   let mainMenu: MainMenu;
 
   // Whenever we will call this function, it will be displayed in the report
   const screenshot = async function (title) {
-    const res = await app.browserWindow.capturePage();
+    const res: any = await app.browserWindow.capturePage();
     // Webdriver.io produces values as base64-encoded string. Allure expects either plain text
     // string or Buffer. So, we are decoding our value, using constructor of built-in Buffer object
     try {
-      AllureReporter.createAttachment(title, res);
+      // @ts-ignore
+      allure.createAttachment(title, res);
       // allure.createAttachment(title, Buffer.from(res, 'base64'));
     } catch (e) {
       // Just to skip allure error while single test run
@@ -38,7 +39,8 @@ describe('demo app', function () {
     get: function (target, props) {
       // below 3 lines are working example but additional testing is required
       // for example we have weird situation with passing arguments into method
-      return AllureReporter.createStep(props, async (...args) => {
+      // @ts-ignore
+      return allure.createStep(props, async (...args) => {
         return target[props](...args);
       });
     }

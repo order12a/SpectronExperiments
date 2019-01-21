@@ -1,4 +1,4 @@
-const AppHolder = require('../util/AppHolder');
+import {AppHolder} from '../util/AppHolder';
 // Chai should used as global so it's not required to import it anymore
 // const chai = require('chai');
 // const chaiAsPromised = require('chai-as-promised');

@@ -1,9 +1,10 @@
 {
     "compilerOptions": {
+        "lib": [ "es2018", "dom", "dom.iterable" ],
         "baseUrl": ".",
         "outDir": "./built",
         "allowJs": true,
-        "target": "es6",
+        "target": "es2017",
         "experimentalDecorators": true,
         "types": ["webdriverio", "mocha", "node", "chai"]
     },
