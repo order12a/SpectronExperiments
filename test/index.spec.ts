@@ -25,7 +25,7 @@ describe('demo app', function () {
   const screenshot = async function (title) {
     const res: any = await app.browserWindow.capturePage();
     try {
-      // @ts-ignore
+      // @ts-ignore // ignored as allure added to global runtime :(
       allure.createAttachment(title, res);
       // allure.createAttachment(title, Buffer.from(res, 'base64'));
     } catch (e) {
@@ -37,7 +37,7 @@ describe('demo app', function () {
     get: function (target, props) {
       // below 3 lines are working example but additional testing is required
       // for example we have weird situation with passing arguments into method
-      // @ts-ignore
+      // @ts-ignore // TODO think about solution with decorators
       return allure.createStep(props, async (...args) => {
         return target[props](...args);
       });
