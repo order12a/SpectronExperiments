@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as chaiAsPromised from "chai-as-promised"
 
-const getUserDataPath = function () {
+const getUserDataPath = function (): any {
   const productName = require('../package').productName;
   switch (process.platform) {
     case 'darwin':
@@ -35,7 +35,7 @@ const removeStoredPreferences = (): void => {
   }
 };
 
-const setupApp = function (app) {
+const setupApp = function (app): any {
   app.client.addCommand('dismissAboutPage', function () {
     return this.isVisible('.js-nav').then(function (navVisible) {
       if (!navVisible) {

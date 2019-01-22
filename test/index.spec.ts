@@ -1,13 +1,13 @@
-const Application = require('spectron').Application;
-const electron = require('electron');
+import { Application } from 'spectron';
 import * as chai from 'chai';
 import * as path from 'path';
-const chaiAsPromised = require('chai-as-promised');
+import * as chaiAsPromised from "chai-as-promised";
 import * as setup from './setup';
 import { AboutPage } from './pages/AboutPage';
 import {AppHolder} from './util/AppHolder';
 import {MainMenu} from './pages/modules/MainMenu';
-import * as beforeHelper from './before.helper'; // Helper with implemented before and after hooks
+
+const electron = require('electron');
 require('mocha-allure-reporter');
 chai.should();
 chai.use(chaiAsPromised);
@@ -24,8 +24,6 @@ describe('demo app', function () {
   // Whenever we will call this function, it will be displayed in the report
   const screenshot = async function (title) {
     const res: any = await app.browserWindow.capturePage();
-    // Webdriver.io produces values as base64-encoded string. Allure expects either plain text
-    // string or Buffer. So, we are decoding our value, using constructor of built-in Buffer object
     try {
       // @ts-ignore
       allure.createAttachment(title, res);
@@ -48,6 +46,7 @@ describe('demo app', function () {
 
   const startApp = () => {
     app = new Application({
+      // @ts-ignore
       path: electron,
       args: [
         path.join(__dirname, '..')
@@ -68,11 +67,9 @@ describe('demo app', function () {
   };
 
   before('Set Up our environment', async function () {
-    // Uncomment below line if we dont want play with separate file for before hooks anymore
-    // setup.removeStoredPreferences();
+    setup.removeStoredPreferences();
     await startApp();
     AppHolder.createAppHolder(app);
-    console.log('Inner before hook\n');
   });
 
   before('Init page objects', async function () {
@@ -84,7 +81,6 @@ describe('demo app', function () {
     if (app && app.isRunning()) {
       await app.stop();
     }
-    console.log('Inner after hook');
   });
 
   // This code will be executed after every test. We can provde extra info to the report,
@@ -97,6 +93,7 @@ describe('demo app', function () {
 
       // Working code for adding images into mochawesome reporter
       // Now mochawesome is removed as dependency needs to added to play with it
+
       // const res = await app.browserWindow.capturePage();
       // if (!fs.existsSync('mochawesome-report/err_shots')) {
       //   fs.mkdirSync('mochawesome-report/err_shots');
@@ -130,28 +127,14 @@ describe('demo app', function () {
     await app.browserWindow.getBounds().should.eventually.have.property('height').and.be.above(0);
     await app.browserWindow.getTitle().should.eventually.equal('Electron API Demos');
     await aboutPage.checkAboutModalIsVisible();
-    // Test return something from method wrapped into allure step
+    // Check return something from method wrapped into allure step
     // console.log(await aboutPage.getAboutModalText());
     await aboutPage.checkNavIsNotVisible();
     await aboutPage.dismissAboutPage();
     await app.client.pause(1000); // Left for observation purposes
     await aboutPage.checkAboutModalIsNotVisible('Test Message', 'Second Message');
-    await aboutPage.checkNavIsNotVisible(); // Intentionally broken step
-
-    // Original code
-    // return app.client.getWindowCount().should.eventually.equal(1)
-    //   .browserWindow.isMinimized().should.eventually.be.false
-    //   .browserWindow.isDevToolsOpened().should.eventually.be.false
-    //   .browserWindow.isVisible().should.eventually.be.true
-    //   .browserWindow.isFocused().should.eventually.be.true
-    //   .browserWindow.getBounds().should.eventually.have.property('width').and.be.above(0)
-    //   .browserWindow.getBounds().should.eventually.have.property('height').and.be.above(0)
-    //   .browserWindow.getTitle().should.eventually.equal('Electron API Demos')
-    //   .waitForVisible('#about-modal').should.eventually.be.true
-    //   .isVisible('.js-nav').should.eventually.be.false
-    //   .click('button[id="get-started"]').pause(500)
-    //   .isVisible('#about-modal').should.eventually.be.false
-    //   .isVisible('.js-nav').should.eventually.be.true;
+    await aboutPage.checkNavIsVisible();
+    // await aboutPage.checkNavIsNotVisible(); // Intentionally broken step
   });
 
   // Dummy failed test
@@ -174,53 +157,38 @@ describe('demo app', function () {
     await app.client.auditSectionAccessibility('clipboard');
     await app.client.auditSectionAccessibility('protocol');
     await app.client.auditSectionAccessibility('desktop-capturer');
-
-    // return app.client.dismissAboutPage()
-    //   .auditSectionAccessibility('windows')
-    //   .auditSectionAccessibility('crash-hang')
-    //   .auditSectionAccessibility('menus')
-    //   .auditSectionAccessibility('shortcuts')
-    //   .auditSectionAccessibility('ex-links-file-manager')
-    //   .auditSectionAccessibility('notifications')
-    //   .auditSectionAccessibility('dialogs')
-    //   .auditSectionAccessibility('tray')
-    //   .auditSectionAccessibility('ipc')
-    //   .auditSectionAccessibility('app-sys-information')
-    //   .auditSectionAccessibility('clipboard')
-    //   .auditSectionAccessibility('protocol')
-    //   .auditSectionAccessibility('desktop-capturer');
   });
 
   describe('when clicking on a section from the nav bar', function () {
-    it('it shows the selected section in the main area', function () {
-      return app.client.dismissAboutPage()
-        .selectSection('windows')
-        .isExisting('button.is-selected[data-section="windows"]').should.eventually.be.true
-        .isVisible('#menus-section').should.eventually.be.false
-        .selectSection('menus')
-        .isVisible('#windows-section').should.eventually.be.false
-        .isExisting('button.is-selected[data-section="windows"]').should.eventually.be.false
-        .isExisting('button.is-selected[data-section="menus"]').should.eventually.be.true;
+    it('it shows the selected section in the main area', async function () {
+      await app.client.dismissAboutPage();
+      await app.client.selectSection('windows');
+      await app.client.isExisting('button.is-selected[data-section="windows"]').should.eventually.be.true;
+      await app.client.isVisible('#menus-section').should.eventually.be.false;
+      await app.client.selectSection('menus');
+      await app.client.isVisible('#windows-section').should.eventually.be.false;
+      await app.client.isExisting('button.is-selected[data-section="windows"]').should.eventually.be.false;
+      await app.client.isExisting('button.is-selected[data-section="menus"]').should.eventually.be.true;
     });
   });
 
   describe('when a demo title is clicked', function () {
-    it('it expands the demo content', function () {
+    it('it expands the demo content', async function () {
       let onlyFirstVisible = Array(30).fill(false);
       onlyFirstVisible[0] = true;
 
-      return app.client.dismissAboutPage()
-        .collapseDemos()
-        .selectSection('windows')
-        .click('.js-container-target')
-        .waitForVisible('.demo-box')
-        .isVisible('.demo-box').should.eventually.deep.equal(onlyFirstVisible);
+      await app.client.dismissAboutPage();
+      await app.client.collapseDemos();
+      await app.client.selectSection('windows');
+      await app.client.click('.js-container-target');
+      await app.client.waitForVisible('.demo-box');
+      await app.client.isVisible('.demo-box').should.eventually.deep.equal(onlyFirstVisible);
     });
   });
 
   describe('when the app is restarted after use', function () {
     it('it launches at last visited section & demo', async function () {
-      let onlyFirstVisible = Array(30).fill(false);
+      let onlyFirstVisible: Array<boolean> = Array(30).fill(false);
       onlyFirstVisible[0] = true;
 
       await app.client.waitForVisible('#windows-section');
@@ -228,15 +196,6 @@ describe('demo app', function () {
       await app.client.waitForVisible('#windows-section');
       await app.client.isVisible('#windows-section').should.eventually.be.true;
       await app.client.isVisible('.demo-box').should.eventually.deep.equal(onlyFirstVisible);
-
-      // Original code (for some reason broken on windows)
-      // return app.client.waitForVisible('#windows-section')
-      //   .then(restartApp)
-      //   .then(function () {
-      //     return app.client.waitForVisible('#windows-section')
-      //       .isVisible('#windows-section').should.eventually.be.true
-      //       .isVisible('.demo-box').should.eventually.deep.equal(onlyFirstVisible);
-      //   });
     });
   });
 

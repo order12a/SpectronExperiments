@@ -1,49 +1,59 @@
-import { BasePage } from "./BasePage";
+import { BasePage } from './BasePage';
+import log from '../util/LoggerDecorator';
 import Client = WebdriverIO.Client;
 import RawResult = WebdriverIO.RawResult;
-const navMenuSelector: string = '.js-nav';
-const aboutModalSelector: string = '#about-modal';
 
 export class AboutPage extends BasePage {
+  private navMenuSelector: string = '.js-nav';
+  private aboutModalSelector: string = '#about-modal';
+
   get aboutModal (): Client<RawResult<WebdriverIO.Element>> & RawResult<WebdriverIO.Element> {
-    return this.app.client.element(aboutModalSelector);
+    return this.app.client.element(this.aboutModalSelector);
   }
 
+  @log
   async checkAboutModalIsVisible (): Promise<void> {
     await this.isAboutModalVisible().should.eventually.be.true;
   }
 
+  @log
   async checkAboutModalIsNotVisible (someArg, someArg2): Promise<void>{
     // console.log(someArg); // Just for testing purposes
     // console.log(someArg2); // Just for testing purposes
     await this.isAboutModalVisible().should.eventually.be.false;
   }
 
-  async isAboutModalVisible (): Promise<boolean> {
-    return this.app.client.isVisible(aboutModalSelector);
+  @log
+  public async isAboutModalVisible (): Promise<boolean> {
+    return await this.app.client.isVisible(this.aboutModalSelector);
   }
 
-  async getAboutModalText (): Promise<string> {
-    return this.aboutModal.getText();
+  @log
+  public async getAboutModalText (): Promise<string> {
+    return await this.aboutModal.getText();
   }
 
-  async getNavMenu (): Promise<WebdriverIO.Element> {
-    return this.app.client.element(navMenuSelector);
+  @log
+  public async getNavMenu (): Promise<WebdriverIO.Element> {
+    return await this.app.client.element(this.navMenuSelector);
   }
 
-  async checkNavIsVisible (): Promise<void> {
+  @log
+  public async checkNavIsVisible (): Promise<void> {
     await this.isNavVisible().should.eventually.be.true;
   }
 
-  async checkNavIsNotVisible (): Promise<void> {
+  @log
+  public async checkNavIsNotVisible (): Promise<void> {
     await this.isNavVisible().should.eventually.be.false;
   }
 
-  async isNavVisible (): Promise<boolean> {
-    return this.app.client.isVisible(navMenuSelector);
+  public async isNavVisible (): Promise<boolean> {
+    return this.app.client.isVisible(this.navMenuSelector);
   }
 
-  async dismissAboutPage (): Promise<void> {
+  @log
+  public async dismissAboutPage (): Promise<void> {
     if (await this.app.client.isVisible('button[id="get-started"]')) {
       await this.app.client.click('button[id="get-started"]');
       this.app.client.pause(500);

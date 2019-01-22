@@ -1,12 +1,8 @@
 import {AppHolder} from '../util/AppHolder';
-// Chai should used as global so it's not required to import it anymore
-// const chai = require('chai');
-// const chaiAsPromised = require('chai-as-promised');
-
-// chai.config.includeStack = false;
-// chai.config.showDiff = true;
-// chai.should();
-// chai.use(chaiAsPromised);
+import * as chai from 'chai';
+import * as chaiAsPromised from "chai-as-promised";
+chai.should();
+chai.use(chaiAsPromised);
 
 export class BasePage {
   app: any;

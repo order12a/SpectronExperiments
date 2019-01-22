@@ -1,3 +1,4 @@
+import log from '../../util/LoggerDecorator';
 import {BaseComponent} from './BaseComponent';
 import Client = WebdriverIO.Client;
 import RawResult = WebdriverIO.RawResult;
@@ -18,12 +19,14 @@ export class MainMenu extends BaseComponent {
     return this.app.client.element(this.containerSelector);
   }
 
-  async selectSection (section): Promise<void> {
+  @log
+  public async selectSection (section): Promise<void> {
     await this.elementContainer.element('button[data-section="' + section + '"]').click();
   }
 
-  async getSelectedSectionText (): Promise<string> {
+  @log
+  public async getSelectedSectionText (): Promise<string> {
     this.selectedButton.waitForVisible(5000);
-    return this.selectedButton.getText();
+    return await this.selectedButton.getText();
   }
 }

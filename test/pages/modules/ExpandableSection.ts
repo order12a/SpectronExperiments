@@ -1,6 +1,6 @@
 import {BaseComponent} from './BaseComponent';
 
-class ExpandableSection extends BaseComponent{
+export class ExpandableSection extends BaseComponent{
   public containerSelector: string;
 
   constructor (containerSelector = '') {
@@ -10,5 +10,3 @@ class ExpandableSection extends BaseComponent{
 
   // TODO implement
 }
-
-module.exports = ExpandableSection;
