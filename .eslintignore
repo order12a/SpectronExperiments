@@ -1,7 +1,0 @@
-allure-results/
-allure-report
-.vscode
-.gitignore
-package.json
-package-lock.json
-.idea

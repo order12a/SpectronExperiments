@@ -5,3 +5,5 @@ allure-results
 allure-report
 .idea
 .DS_Store
+.vscode
+./built

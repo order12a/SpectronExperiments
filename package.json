@@ -8,9 +8,9 @@
   "scripts": {
     "start": "electron .",
     "dev": "electron . --debug",
-    "pretest": "rimraf allure-results",
-    "lint": "eslint test/**",
-    "test": "mocha -R mocha-multi --reporter-options mocha-allure-reporter=-,spec=- --full-trace && standard",
+    "pretest": "rimraf allure-results && rimraf built",
+    "prettier": "./node_modules/.bin/prettier --write ./test/**/*.ts",
+    "test": "mocha --require ts-node/register --ui bdd -R mocha-multi --reporter-options mocha-allure-reporter=-,spec=- ./test/*.spec.ts --full-trace && standard",
     "posttest": "allure generate allure-results --clean -o allure-report",
     "package": "npm-run-all package:*",
     "package:mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --out=out --icon=assets/app-icon/mac/app.icns --osx-sign.identity='Developer ID Application: GitHub' --extend-info=assets/mac/info.plist",
@@ -35,6 +35,12 @@
   "author": "GitHub",
   "license": "MIT",
   "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/chai-as-promised": "^7.1.0",
+    "@types/electron": "^1.6.10",
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.12.18",
+    "@types/webdriverio": "^4.13.2",
     "allure-commandline": "^2.8.1",
     "chai": "^3.4.1",
     "chai-as-promised": "^6.0.0",
@@ -42,30 +48,31 @@
     "devtron": "^1.3.0",
     "electron-packager": "^12.1.0",
     "electron-winstaller": "^2.2.0",
-    "eslint": "^5.9.0",
-    "eslint-config-standard": "^12.0.0",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-node": "^8.0.0",
-    "eslint-plugin-promise": "^4.0.1",
-    "eslint-plugin-standard": "^4.0.0",
     "husky": "^0.14.3",
     "mocha": "^5.2.0",
     "mocha-allure-reporter": "^1.4.0",
     "mocha-multi": "^1.0.1",
     "mochawesome": "^3.1.1",
     "npm-run-all": "^4.0.2",
+    "prettier": "^1.15.3",
     "request": "^2.70.0",
     "rimraf": "^2.6.2",
     "signcode": "^0.5.0",
     "spectron": "^5.0.0",
     "standard": "^8.2.0",
-    "webpack": "^4.27.1"
+    "ts-node": "^7.0.1",
+    "tsconfig-paths": "3.7.0",
+    "tslint": "^5.12.1",
+    "typescript": "^3.2.2",
+    "webpack": "^4.27.1",
+    "winston": "^3.1.0"
   },
   "dependencies": {
     "electron": "^3.0.3",
     "electron-log": "^2.2.14",
     "electron-settings": "^3.0.7",
     "electron-shortcut-normalizer": "^1.0.0",
+    "electron-typescript-definitions": "^4.0.0",
     "glob": "^7.1.0",
     "highlight.js": "^9.3.0",
     "update-electron-app": "^1.1.1"
@@ -73,6 +80,9 @@
   "standard": {
     "env": {
       "mocha": true
-    }
+    },
+    "ignore": [
+      "./test/**/*"
+    ]
   }
 }
